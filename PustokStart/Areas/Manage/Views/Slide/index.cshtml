@@ -1,0 +1,77 @@
+﻿@model PaginatedList<Slide>
+@{
+    ViewData["Title"] = "Index";
+    int order = (Model.PageIndex -1) * 2;
+}
+
+
+<div class="row justify-content-center">
+    <div class="col-md-10">
+        <h1>Slide</h1>
+        <a class="btn btn-primary" asp-action="create">Create</a>
+       @* <form asp-action="index" method="get">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="form-group">
+                        <input type="text" name="search" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+                    </div>
+                </div>
+                <div class="col-md-4">
+                    <button type="submit" class="btn btn-primary">Submit</button>
+                </div>
+            </div>
+
+
+        </form>*@
+       <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Title1</th>
+                    <th scope="col">Title2</th>
+                    <th scope="col">Order</th>
+                    <th scope="col">Image</th>
+                    <th scope="col">Actions</th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model.Items)
+                {
+                    order++;
+                    <tr>
+                        <td>@order</td>
+                        <td>@item.Title1</td>
+                        <td>@item.Title2</td>
+                        <td>@item.Order</td>
+                        <td><img height="50px" width="50px" src="~/uploads/sliders/@item.ImageName"></td>
+                        <td>
+
+                            <a class="btn btn-warning" asp-action="edit" asp-route-id="@item.Id">Edit</a>
+                            <a class="btn btn-danger">Delete</a>
+
+                        </td>
+                    </tr>
+                }
+
+            </tbody>
+        </table>
+        <nav aria-label="Page navigation example">
+            <ul class="pagination justify-content-center">
+                <li class="page-item @(Model.HasPrevious?"":"disabled")">
+                    <a class="page-link" asp-action="index" asp-route-search="@ViewBag.Search" asp-route-page="@(Model.PageIndex-1)" tabindex="-1">Previous</a>
+                </li>
+                @for (int i = 1; i <= Model.TotalPage; i++)
+                {
+                    <li class="page-item @(i==Model.PageIndex?"active":"")"><a class="page-link" asp-action="index" asp-route-search="@ViewBag.Search" asp-route-page="@i">@i</a></li>
+
+                }
+                <li class="page-item @(Model.HasNext?"":"disabled")">
+                    <a class="page-link" asp-action="index" asp-route-search="@ViewBag.Search" asp-route-page="@(Model.PageIndex+1)">Next</a>
+
+                </li>
+            </ul>
+        </nav>
+    </div>
+</div>
+
